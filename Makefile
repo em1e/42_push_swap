@@ -25,7 +25,8 @@ HEADERS = -I ./include/
 LIBFT = ./libft/libft.a
 
 FILES = main.c split.c init_stack.c error_handling.c is_sorted.c \
-	utils.c swap.c sort_stacks.c rotate.c
+	utils.c swap.c sort_stacks.c rotate.c push_cost.c sort_three.c \
+	find_stack.c print_stack.c
 
 SRCS = $(addprefix srcs/, $(FILES))
 OBJS = $(addprefix objs/, $(FILES:.c=.o))

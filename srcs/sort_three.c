@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tolower.c                                       :+:      :+:    :+:   */
+/*   sort_three.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/23 15:20:52 by vkettune          #+#    #+#             */
-/*   Updated: 2023/10/26 10:38:08 by vkettune         ###   ########.fr       */
+/*   Created: 2024/03/03 16:02:40 by vkettune          #+#    #+#             */
+/*   Updated: 2024/06/05 11:07:11 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_tolower(int c)
+#include "push_swap.h"
+
+void	sort_three(t_stack **a)
 {
-	while (c >= 'A' && c <= 'Z')
-		c += 32;
-	return (c);
+	t_stack	*biggest_node;
+
+	biggest_node = find_max(*a);
+	if (biggest_node == *a)
+		rx(a, 'a');
+	else if ((*a)->next == biggest_node)
+		rrx(a, 'a');
+	if ((*a)->nbr > (*a)->next->nbr)
+		sx(a, 'a');
 }

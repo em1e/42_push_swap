@@ -1,88 +1,96 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/30 09:42:05 by vkettune          #+#    #+#             */
+/*   Updated: 2024/06/05 15:50:15 by vkettune         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
 # include "libft.h"
-#include <stdbool.h>
+# include <stdbool.h>
 # include <limits.h>
 
-// typedef struct s_stack
-// {
-// 	int				num;
-// 	struct s_stack	*next;
-// 	struct s_stack	*prev;
-// }	t_stack;
-
-typedef struct s_stack //A container of data enclosed in {} braces. `s_` for struct
+typedef struct s_stack
 {
-	int					nbr; //The number to sort
-	int					index; //The number's position in the stack
-	int					push_cost; //How many commands in total
-	bool				above_median; //Used to calculate `push_cost`
-	bool				cheapest; //The node that is the cheapest to do commands
-	struct s_stack	*target_node; //The target node of a node in the opposite stack
-	struct s_stack	*next; //A pointer to the next node
-	struct s_stack	*prev; //A pointer to the previous node
-}	t_stack; //The "shortened name", "t_stack_node". `t_` for type
+	int				nbr;
+	int				index;
+	int				push_cost;
+	bool			above_median;
+	bool			cheapest;
+	struct s_stack	*target_node;
+	struct s_stack	*next;
+	struct s_stack	*prev;
+}	t_stack;
 
-void print_stack(t_stack **x, int stack);
+// error_handling.c
+char		**free_split(char **split);
+int			check_syntax(char *n);
+int			error_duplicate(t_stack *a, int n);
+void		free_errors(t_stack **a);
+int			error(void);
+void		free_stack(t_stack **stack);
 
-t_stack	*stack_from_str(char *str);
-void	free_errors(t_stack **a);
-char **split(char *s, char c);
-void	init_stack_a(t_stack **a, char **argv);
-bool	is_sorted(t_stack *stack);
-t_stack	*find_last(t_stack *stack);
-void	sort_three(t_stack **a);
-void	sort_stacks(t_stack **a, t_stack **b);
+// find_stack.c
+t_stack		*find_max(t_stack *stack);
+t_stack		*find_min(t_stack *stack);
+t_stack		*find_last(t_stack *stack);
+int			stack_len(t_stack *stack);
 
-int	stack_len(t_stack *stack);
-t_stack	*find_max(t_stack *stack);
-t_stack	*find_min(t_stack *stack);
+// init_stack.c
+t_stack		*find_target_node(t_stack *y, int stack);
+void		set_target(t_stack *x, t_stack *y, int stack);
+void		init_a(t_stack *a, t_stack *b);
+void		init_b(t_stack *a, t_stack *b);
+void		init_fill_a(t_stack **a, char **argv);
 
-t_stack	*get_cheapest(t_stack *stack);
-void	set_cheapest(t_stack *stack);
-void	init_stack_a(t_stack **a, char **argv);
-void	init_a(t_stack *x, t_stack *y);
-void	init_b(t_stack *a, t_stack *b);
-void	current_index(t_stack *stack);
+// is_sorted.c
+bool		is_sorted(t_stack *stack);
 
-void	cost_analysis(t_stack *x, t_stack *y);
-void	move_a_to_b(t_stack **a, t_stack **b);
-void	set_target(t_stack *x, t_stack *y, int stack);
+// main.c
+void		print_stack(t_stack **x, int stack);
+int			main(int argc, char **argv);
 
-void	move_a_to_b(t_stack **a, t_stack **b);
-void	move_b_to_a(t_stack **a, t_stack **b);
-void	prep_for_push(t_stack **stack, t_stack *top_node, char stack_name);
-void	min_on_top(t_stack **a);
+// push_cost.c
+t_stack		*get_cheapest(t_stack *stack);
+void		set_cheapest(t_stack *stack);
+void		current_index(t_stack *stack);
+void		cost_analysis(t_stack *x, t_stack *y);
 
+// rotate.c
+void		rx(t_stack **x, int stack);
+void		rr(t_stack **a, t_stack **b);
+void		rrx(t_stack **x, int stack);
+void		rrr(t_stack **a, t_stack **b);
 
-t_stack	*make_stack(int len, char **strs);
-t_stack	*ft_stacklast(t_stack *stack);
-t_stack	*ft_stacknew(int n);
+// sort_stacks.c
+void		prep_for_push(t_stack **stack, t_stack *top_node, char stack_name);
+void		move_a_to_b(t_stack **a, t_stack **b);
+void		move_b_to_a(t_stack **a, t_stack **b);
+void		min_on_top(t_stack **a);
+void		sort_stacks(t_stack **a, t_stack **b);
 
-int		get_smallest(t_stack **stack_x);
-int		get_largest(t_stack **stack_x);
-int		get_shortest_dir(t_stack **stack_x, int i);
-// int		is_sorted(t_stack **stack_a);
-int		ft_stacksize(t_stack *stack);
+// sort_three.c
+void		sort_three(t_stack **a);
 
-void	free_all(t_stack **stack_a, t_stack **stack_b, t_list **commands);
-int		error(char *msg);
-void	free_stack(t_stack **stack);
+// split.c
+int			count_words(char *s, char c);
+char		*next_word(char *s, char c);
+char		**split(char *s, char c);
 
-void	tiny_sort(t_stack **stack_a, t_stack **stack_b, t_list **commands);
-void	exec_command(t_stack **stack_a, t_stack **stack_b, char *command,
-			t_list **commands);
+// swap.c
+void		px(t_stack **x, t_stack **y, int stack);
+void		sx(t_stack **x, int stack);
+void		ss(t_stack **a, t_stack **b);
 
-void	sx(t_stack **x, int stack);
-void	ss(t_stack **a, t_stack **b);
-void	px(t_stack **x, t_stack **y, int stack);
-
-void	rx(t_stack **x, int stack);
-void	rr(t_stack **a, t_stack **b);
-void	rrx(t_stack **x, int stack);
-void	rrr(t_stack **a, t_stack **b);
+// utils.c
+long		ft_atol(const char *s);
+void		append_node(t_stack **stack, int n);
 
 #endif

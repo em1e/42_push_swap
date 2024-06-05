@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   is_sorted.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/30 09:44:10 by vkettune          #+#    #+#             */
+/*   Updated: 2024/06/05 09:53:47 by vkettune         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 
-bool	is_sorted(t_stack *stack) //Define a function that checks if the stack is sorted in ascending order
+bool	is_sorted(t_stack *stack)
 {
 	if (!stack)
 		return (1);
-	while (stack->next) //Loop until the end of the stack is reached
+	while (stack->next)
 	{
-		if (stack->nbr > stack->next->nbr) //Check if the current value is larger than the next node's value, indicating it is out of sort
+		if (stack->nbr > stack->next->nbr)
 			return (false);
-		stack = stack->next; //If not, move to the next node for processing
+		stack = stack->next;
 	}
 	return (true);
 }

@@ -1,77 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_stack.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/30 09:42:05 by vkettune          #+#    #+#             */
+/*   Updated: 2024/06/05 18:04:39 by vkettune         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "push_swap.h"
 
-long	ft_atol(const char *s) //Define a function that converts every string into a long value
+t_stack	*find_target_node(t_stack *y, int stack)
 {
-	long	result;
-	int		sign;
-
-	result = 0;
-	sign = 1; 
-	while (*s == ' ' || *s == '\t' || *s == '\n' || \
-			*s == '\r' || *s == '\f' || *s == '\v')
-		s++;
-	if (*s == '-' || *s == '+')
-	{
-		if (*s == '-')
-			sign = -1;
-		s++;
-	}
-	while (ft_isdigit(*s))
-		result = result * 10 + (*s++ - '0');
-	return (result * sign);
-}
-
-void	cost_analysis(t_stack *x, t_stack *y)
-{
-	int	len_x;
-	int	len_y;
-
-	len_x = stack_len(x);
-	len_y = stack_len(y);
-	while (x)
-	{
-		x->push_cost = x->index;
-		if (!(x->above_median))
-			x->push_cost = len_x - (x->index);
-		if (x->target_node->above_median)
-			x->push_cost += x->target_node->index;
-		else
-			x->push_cost += len_y - (x->target_node->index);
-		x = x->next;
-	}
-}
-
-void	append_node(t_stack **stack, int n) //Define a function that searches for the last node to append to the linked list
-{
-	t_stack	*node; //To store a pointer to the new node to be created with the value `n`
-	t_stack	*last_node; //To store a pointer to the current last node of the stack
-
-	if (!stack)
-		return ;
-	node = malloc(sizeof(t_stack)); //Allocate memory for the new node
-	if (!node)
-		return ;
-	node->next = NULL; //Set the next pointer of the new node to NULL because it will be the last node in the list
-	node->nbr = n; //Set the `next` data of of the new node to `n` value
-	if (!(*stack)) //Check if the stack is empty or currently pointing to NULL, indicating a first node needs to be found
-	{
-		*stack = node; //If empty, update the pointer *stack to point to the node, effectively making it the new head of the linked list
-		node->prev = NULL; //Set the head node's previous pointer to NULL as it's the first node
-	}
-	else //If the stack is not empty, it means there are existing nodes in the linked list
-	{
-		last_node = find_last(*stack); //In which case, find the last node
-		last_node->next = node; //Append the new node to the last node
-		node->prev = last_node; //Update the previous pointer of the new node and complete the appending
-	}
+	if (stack == 'a')
+		return (find_min(y));
+	else if (stack == 'b')
+		return (find_max(y));
+	return (NULL);
 }
 
 void	set_target(t_stack *x, t_stack *y, int stack)
 {
 	t_stack	*current_y;
 	t_stack	*target_node;
-	long			best_match_index;
+	long	best_match_index;
 
 	while (x)
 	{
@@ -79,7 +33,7 @@ void	set_target(t_stack *x, t_stack *y, int stack)
 		current_y = y;
 		while (current_y)
 		{
-			if (current_y->nbr < x->nbr 
+			if (current_y->nbr < x->nbr
 				&& current_y->nbr > best_match_index)
 			{
 				best_match_index = current_y->nbr;
@@ -88,104 +42,49 @@ void	set_target(t_stack *x, t_stack *y, int stack)
 			current_y = current_y->next;
 		}
 		if (best_match_index == LONG_MIN)
-		{
-			if (stack == 'a')
-				x->target_node = find_min(y);
-			else if (stack == 'b')
-				x->target_node = find_max(y);
-		}
+			x->target_node = find_target_node(y, stack);
 		else
 			x->target_node = target_node;
 		x = x->next;
 	}
 }
 
-void	init_a(t_stack *x, t_stack *y)
+void	init_a(t_stack *a, t_stack *b)
 {
-	current_index(x);
-	current_index(y);
-	set_target(x, y, 'a');
-	cost_analysis(x, y);
-	set_cheapest(x);
+	current_index(a);
+	current_index(b);
+	set_target(a, b, 'a');
+	cost_analysis(a, b);
+	set_cheapest(a);
 }
 
-void	init_b(t_stack *a, t_stack *b) //Define a function that prepares the nodes for pushing `b` to `a`
+void	init_b(t_stack *a, t_stack *b)
 {
 	current_index(a);
 	current_index(b);
 	set_target(a, b, 'b');
 }
 
-void	init_stack_a(t_stack **a, char **argv) //Define a function that initiates stack `a` by handling any errors and appending required nodes to complete a stack
+void	init_fill_a(t_stack **a, char **argv)
 {
 	long	n;
 	int		i;
 
 	i = 0;
+	// ft_printf("test\n");
+	if (!ft_isdigit(argv[i][0]) && argv[i][0] != '-' && argv[i][0] != '+')
+		i++;
 	while (argv[i])
 	{
-		// if (error_syntax(argv[i]))
-		// 	free_errors(a);
+		// ft_printf("init argv[%d]: %s\n", i, argv[i]);
+		if (check_syntax(argv[i]))
+			error();
 		n = ft_atol(argv[i]);
-		if (n > INT_MAX || n < INT_MIN)
+		if (n > LONG_MAX || n < LONG_MIN)
 			free_errors(a);
-		// if (error_duplicate(*a, (int)n))
-		// 	free_errors(a); 
+		if (error_duplicate(*a, (int)n))
+			free_errors(a);
 		append_node(a, (int)n);
 		i++;
 	}
-}
-
-void	current_index(t_stack *stack)
-{
-	int	i;
-	int	median;
-
-	i = 0;
-	if (!stack)
-		return ;
-	median = stack_len(stack) / 2;
-	while (stack)
-	{
-		stack->index = i;
-		if (i <= median)
-			stack->above_median = true;
-		else
-			stack->above_median = false;
-		stack = stack->next;
-		++i;
-	}
-}
-
-t_stack	*get_cheapest(t_stack *stack)
-{
-	if (!stack)
-		return (NULL);
-	while (stack)
-	{
-		if (stack->cheapest)
-			return (stack);
-		stack = stack->next;
-	}
-	return (NULL);
-}
-
-void	set_cheapest(t_stack *stack)
-{
-	long			cheapest_value;
-	t_stack	*cheapest_node;
-
-	if (!stack)
-		return ;
-	cheapest_value = LONG_MAX;
-	while (stack)
-	{
-		if (stack->push_cost < cheapest_value)
-		{
-			cheapest_value = stack->push_cost;
-			cheapest_node = stack;
-		}
-		stack = stack->next;
-	}
-	cheapest_node->cheapest = true;
 }
