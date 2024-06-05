@@ -1,39 +1,38 @@
 #include "push_swap.h"
 
-void	sort_stacks(t_stack **a, t_stack **b) //Define a function that sorts stack `a` if it has more than 3 nodes
+void	sort_stacks(t_stack **a, t_stack **b)
 {
 	int	len_a; 
 
 	len_a = stack_len(*a);
-	if (len_a-- > 3 && !is_sorted(*a)) //If stack `a` has more than three nodes and aren't sorted
+	if (len_a-- > 3 && !is_sorted(*a))
 		px(b, a, 'b');
-	if (len_a-- > 3 && !is_sorted(*a)) //If stack `a` still has more than three nodes and aren't sorted
+	if (len_a-- > 3 && !is_sorted(*a))
 		px(b, a, 'b');
 	print_stack(a, 'a'); // for testing
 	print_stack(b, 'b'); // for testing
-	while (len_a-- > 3 && !is_sorted(*a)) //If stack `a` still has more than three nodes and aren't sorted
+	while (len_a-- > 3 && !is_sorted(*a))
 	{
-		init(*a, *b); //Iniate all nodes from both stacks
-		move_a_to_b(a, b); //Move the cheapest `a` nodes into a sorted stack `b`, until three nodes are left in stack `a`
+		init_a(*a, *b);
+		move_a_to_b(a, b);
 		print_stack(a, 'a'); // for testing
 		print_stack(b, 'b'); // for testing
 	}
 	sort_three(a);
 	print_stack(a, 'a'); // for testing
 	print_stack(b, 'b'); // for testing
-	while (*b) //Until the end of stack `b` is reached
+	while (*b)
 	{
-		init(*b, *a); //Initiate all nodes from both stacks
-		move_b_to_a(a, b); //Move all `b` nodes back to a sorted stack `a`
+		init_b(*b, *a);
+		move_b_to_a(a, b);
 		print_stack(a, 'a'); // for testing
 		print_stack(b, 'b'); // for testing
 	}
+	current_index(*a);
 	print_stack(a, 'a'); // for testing
 	print_stack(b, 'b'); // for testing
-	current_index(*a); //Refresh the current position of stack `a`
-	print_stack(a, 'a'); // for testing
-	print_stack(b, 'b'); // for testing
-	min_on_top(a); //Ensure smallest number is on top
+	min_on_top(a);
+	ft_printf("final!!\n");
 	print_stack(a, 'a'); // for testing
 	print_stack(b, 'b'); // for testing
 }
@@ -56,40 +55,52 @@ void	prep_for_push(t_stack **stack, t_stack *top_node, char stack_name)
 		if (stack_name == 'a') //If not, and it is stack `a`, execute the following
 		{
 			if (top_node->above_median)
-				ra(stack, false);
+				rx(stack, 'a');
 			else
-				rra(stack, false);
+				rrx(stack, 'a');
 		}
 		else if (stack_name == 'b') //If not, and it is stack `b`, execute the following
 		{
 			if (top_node->above_median)
-				rb(stack, false);
+				rx(stack, 'b');
 			else
-				rrb(stack, false);
+				rrx(stack, 'b');
 		}	
 	}
 }
 
-void	move_a_to_b(t_stack **a, t_stack **b) //Define a function that prepares the cheapest nodes on top of the stacks for pushing `a` nodes to stack `b`, until there are three nodes left in `a`
+void	move_a_to_b(t_stack **a, t_stack **b)
 {
-	t_stack	*cheapest_node; //To store the pointer to the cheapest `a` node
+	t_stack	*cheapest_node;
 
 	cheapest_node = get_cheapest(*a); 
 	if (cheapest_node->above_median 
-		&& cheapest_node->target_node->above_median) //If both the cheapest `a` node and its target `b` node are above the median
-		rr(a, b);
+		&& cheapest_node->target_node->above_median)
+		{
+			// rr(a, b);
+			while (*b != cheapest_node->target_node && *a != cheapest_node)
+				rr(a, b);
+			// current_index(*a);
+			// current_index(*b);
+		}
 	else if (!(cheapest_node->above_median) 
-		&& !(cheapest_node->target_node->above_median)) //If both the cheapest `a` node and its target `b` node are below the median
-		rrr(a, b); //`rev_rotate_both` will execute if neither nodes are at the top
-	// prep_for_push(a, cheapest_node, 'a'); //Ensure the cheapest nodes is at the top, ready for pushing
-	// prep_for_push(b, cheapest_node->target_node, 'b'); //Ensure the target node is at the top, ready for pushing
+		&& !(cheapest_node->target_node->above_median))
+		{
+			// rrr(a, b);
+			while (*b != cheapest_node->target_node && *a != cheapest_node)
+				rrr(a, b);
+			// current_index(*a);
+			// current_index(*b);
+		}
+	prep_for_push(a, cheapest_node, 'a');
+	prep_for_push(b, cheapest_node->target_node, 'b');
 	px(b, a, 'b');
 }
 
 void	move_b_to_a(t_stack **a, t_stack **b) //Define a function that prepares `b`'s target `a` nodes for pushing all `b` nodes back to stack `a` 
 {
-	// prep_for_push(a, (*b)->target_node, 'a'); //Ensure `b`'s target `a` node is on top of the stack
-	px(a, b, 'a'); 
+	prep_for_push(a, (*b)->target_node, 'a'); //Ensure `b`'s target `a` node is on top of the stack
+	px(a, b, 'a');
 }
 
 void	sort_three(t_stack **a) 

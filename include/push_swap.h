@@ -44,12 +44,13 @@ t_stack	*find_min(t_stack *stack);
 t_stack	*get_cheapest(t_stack *stack);
 void	set_cheapest(t_stack *stack);
 void	init_stack_a(t_stack **a, char **argv);
-void	init(t_stack *x, t_stack *y);
+void	init_a(t_stack *x, t_stack *y);
+void	init_b(t_stack *a, t_stack *b);
 void	current_index(t_stack *stack);
 
 void	cost_analysis(t_stack *x, t_stack *y);
 void	move_a_to_b(t_stack **a, t_stack **b);
-void	set_target(t_stack *x, t_stack *y);
+void	set_target(t_stack *x, t_stack *y, int stack);
 
 void	move_a_to_b(t_stack **a, t_stack **b);
 void	move_b_to_a(t_stack **a, t_stack **b);

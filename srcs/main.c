@@ -40,7 +40,6 @@ int	main(int argc, char **argv)
 		else 
 			sort_stacks(&a, &b);
 	}
-	print_stack(&a, 'a'); // for testing
 	ft_printf("All sorted!\n"); // remove
 	free_stack(&a);
 	return (0);

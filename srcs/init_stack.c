@@ -67,7 +67,7 @@ void	append_node(t_stack **stack, int n) //Define a function that searches for t
 	}
 }
 
-void	set_target(t_stack *x, t_stack *y)
+void	set_target(t_stack *x, t_stack *y, int stack)
 {
 	t_stack	*current_y;
 	t_stack	*target_node;
@@ -88,20 +88,32 @@ void	set_target(t_stack *x, t_stack *y)
 			current_y = current_y->next;
 		}
 		if (best_match_index == LONG_MIN)
-			x->target_node = find_max(y);
+		{
+			if (stack == 'a')
+				x->target_node = find_min(y);
+			else if (stack == 'b')
+				x->target_node = find_max(y);
+		}
 		else
 			x->target_node = target_node;
 		x = x->next;
 	}
 }
 
-void	init(t_stack *x, t_stack *y)
+void	init_a(t_stack *x, t_stack *y)
 {
 	current_index(x);
 	current_index(y);
-	set_target(x, y);
+	set_target(x, y, 'a');
 	cost_analysis(x, y);
 	set_cheapest(x);
+}
+
+void	init_b(t_stack *a, t_stack *b) //Define a function that prepares the nodes for pushing `b` to `a`
+{
+	current_index(a);
+	current_index(b);
+	set_target(a, b, 'b');
 }
 
 void	init_stack_a(t_stack **a, char **argv) //Define a function that initiates stack `a` by handling any errors and appending required nodes to complete a stack
@@ -115,11 +127,11 @@ void	init_stack_a(t_stack **a, char **argv) //Define a function that initiates s
 		// if (error_syntax(argv[i]))
 		// 	free_errors(a);
 		n = ft_atol(argv[i]);
-		if (n > INT_MAX || n < INT_MIN) //Check for overflow
+		if (n > INT_MAX || n < INT_MIN)
 			free_errors(a);
 		// if (error_duplicate(*a, (int)n))
 		// 	free_errors(a); 
-		append_node(a, (int)n); //If no errors, append the node to the linked list by, taking a pointer to stack `a`, create a new node and assign `n` to that new node
+		append_node(a, (int)n);
 		i++;
 	}
 }
