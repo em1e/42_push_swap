@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/03 16:02:40 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 11:07:11 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 09:33:29 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 void	sort_three(t_stack **a)
 {
-	t_stack	*biggest_node;
+	t_stack	*biggest;
 
-	biggest_node = find_max(*a);
-	if (biggest_node == *a)
+	biggest = find_biggest(*a);
+	if (biggest == *a)
 		rx(a, 'a');
-	else if ((*a)->next == biggest_node)
+	else if ((*a)->next == biggest)
 		rrx(a, 'a');
 	if ((*a)->nbr > (*a)->next->nbr)
 		sx(a, 'a');

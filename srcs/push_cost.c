@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 03:55:01 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 14:12:04 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 10:14:42 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,61 +27,40 @@ t_stack	*get_cheapest(t_stack *stack)
 
 void	set_cheapest(t_stack *stack)
 {
-	long	cheapest_value;
-	t_stack	*cheapest_node;
+	long	cheapest_cost;
+	t_stack	*node;
 
 	if (!stack)
 		return ;
-	cheapest_value = LONG_MAX;
+	cheapest_cost = LONG_MAX;
 	while (stack)
 	{
-		if (stack->push_cost < cheapest_value)
+		if (stack->push_cost < cheapest_cost)
 		{
-			cheapest_value = stack->push_cost;
-			cheapest_node = stack;
+			cheapest_cost = stack->push_cost;
+			node = stack;
 		}
 		stack = stack->next;
 	}
-	cheapest_node->cheapest = true;
+	node->cheapest = true;
 }
 
-void	current_index(t_stack *stack)
+void	cost_analysis(t_stack *a, t_stack *b)
 {
-	int	i;
-	int	median;
+	int	len_a;
+	int	len_b;
 
-	i = 0;
-	if (!stack)
-		return ;
-	median = stack_len(stack) / 2;
-	while (stack)
+	len_a = stack_len(a);
+	len_b = stack_len(b);
+	while (a)
 	{
-		stack->index = i;
-		if (i <= median)
-			stack->above_median = true;
+		a->push_cost = a->index;
+		if (!(a->above_median))
+			a->push_cost = len_a - (a->index);
+		if (a->target_node->above_median)
+			a->push_cost += a->target_node->index;
 		else
-			stack->above_median = false;
-		stack = stack->next;
-		++i;
-	}
-}
-
-void	cost_analysis(t_stack *x, t_stack *y)
-{
-	int	len_x;
-	int	len_y;
-
-	len_x = stack_len(x);
-	len_y = stack_len(y);
-	while (x)
-	{
-		x->push_cost = x->index;
-		if (!(x->above_median))
-			x->push_cost = len_x - (x->index);
-		if (x->target_node->above_median)
-			x->push_cost += x->target_node->index;
-		else
-			x->push_cost += len_y - (x->target_node->index);
-		x = x->next;
+			a->push_cost += len_b - (a->target_node->index);
+		a = a->next;
 	}
 }

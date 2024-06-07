@@ -6,23 +6,29 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:32:11 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 16:38:46 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 09:46:27 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-char	**free_split(char **split)
+int	check_syntax(char *n)
 {
-	int i = 0;
-
-	while (split[i])
-		free(split[i++]);
-	free(split);
+	if (!(*n == '+' || *n == '-'
+			|| (*n >= '0' && *n <= '9')))
+		return (1);
+	if ((*n == '+' || *n == '-')
+		&& !(n[1] >= '0' && n[1] <= '9'))
+		return (1);
+	while (*++n)
+	{
+		if (!(*n >= '0' && *n <= '9'))
+			return (1);
+	}
 	return (0);
 }
 
-int	error_duplicate(t_stack *a, int n)
+int	check_duplicate(t_stack *a, int n)
 {
 	if (!a)
 		return (0);
@@ -53,7 +59,7 @@ void	free_stack(t_stack **stack)
 	*stack = NULL;
 }
 
-int error(void)
+void	error(void)
 {
 	ft_printf("Error\n");
 	exit(1);

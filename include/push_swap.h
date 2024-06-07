@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:42:05 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 15:50:15 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 10:19:29 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,22 +30,20 @@ typedef struct s_stack
 }	t_stack;
 
 // error_handling.c
-char		**free_split(char **split);
 int			check_syntax(char *n);
-int			error_duplicate(t_stack *a, int n);
-void		free_errors(t_stack **a);
-int			error(void);
+int			check_duplicate(t_stack *a, int n);
 void		free_stack(t_stack **stack);
+void		free_errors(t_stack **a);
+void		error(void);
 
-// find_stack.c
-t_stack		*find_max(t_stack *stack);
-t_stack		*find_min(t_stack *stack);
+// find.c
+t_stack		*find_biggest(t_stack *stack);
+t_stack		*find_smallest(t_stack *stack);
 t_stack		*find_last(t_stack *stack);
-int			stack_len(t_stack *stack);
 
 // init_stack.c
-t_stack		*find_target_node(t_stack *y, int stack);
-void		set_target(t_stack *x, t_stack *y, int stack);
+t_stack		*find_target_node(t_stack *b, int stack);
+void		set_target(t_stack *a, t_stack *b, int stack, long limit);
 void		init_a(t_stack *a, t_stack *b);
 void		init_b(t_stack *a, t_stack *b);
 void		init_fill_a(t_stack **a, char **argv);
@@ -54,13 +52,12 @@ void		init_fill_a(t_stack **a, char **argv);
 bool		is_sorted(t_stack *stack);
 
 // main.c
-void		print_stack(t_stack **x, int stack);
+int			stack_len(t_stack *stack);
 int			main(int argc, char **argv);
 
 // push_cost.c
 t_stack		*get_cheapest(t_stack *stack);
 void		set_cheapest(t_stack *stack);
-void		current_index(t_stack *stack);
 void		cost_analysis(t_stack *x, t_stack *y);
 
 // rotate.c
@@ -92,5 +89,10 @@ void		ss(t_stack **a, t_stack **b);
 // utils.c
 long		ft_atol(const char *s);
 void		append_node(t_stack **stack, int n);
+void		set_current_index(t_stack *a, t_stack *b);
+void		current_index(t_stack *stack);
+
+// !! testing !!
+// void		print_stack(t_stack **x, int stack);
 
 #endif

@@ -6,28 +6,12 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 12:04:23 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 15:34:30 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 09:27:46 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <stdio.h>
-
-int	check_syntax(char *n)
-{
-	if (!(*n == '+' || *n == '-'
-			|| (*n >= '0' && *n <= '9')))
-		return (1);
-	if ((*n == '+' || *n == '-')
-		&& !(n[1] >= '0' && n[1] <= '9'))
-		return (1);
-	while (*++n)
-	{
-		if (!(*n >= '0' && *n <= '9'))
-			return (1);
-	}
-	return (0);
-}
 
 long	ft_atol(const char *s)
 {
@@ -72,5 +56,32 @@ void	append_node(t_stack **stack, int n)
 		last_node = find_last(*stack);
 		last_node->next = node;
 		node->prev = last_node;
+	}
+}
+
+void	set_current_index(t_stack *a, t_stack *b)
+{
+	current_index(a);
+	current_index(b);
+}
+
+void	current_index(t_stack *stack)
+{
+	int	i;
+	int	median;
+
+	i = 0;
+	if (!stack)
+		return ;
+	median = stack_len(stack) / 2;
+	while (stack)
+	{
+		stack->index = i;
+		if (i <= median)
+			stack->above_median = true;
+		else
+			stack->above_median = false;
+		stack = stack->next;
+		++i;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 03:55:01 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 14:15:26 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 09:59:29 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,25 @@ void	prep_for_push(t_stack **stack, t_stack *top_node, char stack_name)
 
 void	move_a_to_b(t_stack **a, t_stack **b)
 {
-	t_stack	*cheapest_node;
+	t_stack	*cheapest;
 
-	cheapest_node = get_cheapest(*a);
-	if (cheapest_node->above_median
-		&& cheapest_node->target_node->above_median)
+	cheapest = get_cheapest(*a);
+	if (cheapest->above_median
+		&& cheapest->target_node->above_median)
 	{
-		while (*b != cheapest_node->target_node && *a != cheapest_node)
+		while (*b != cheapest->target_node && *a != cheapest)
 			rr(a, b);
+		set_current_index(*a, *b);
 	}
-	else if (!(cheapest_node->above_median)
-		&& !(cheapest_node->target_node->above_median))
+	else if (!(cheapest->above_median)
+		&& !(cheapest->target_node->above_median))
 	{
-		while (*b != cheapest_node->target_node && *a != cheapest_node)
+		while (*b != cheapest->target_node && *a != cheapest)
 			rrr(a, b);
+		set_current_index(*a, *b);
 	}
-	prep_for_push(a, cheapest_node, 'a');
-	prep_for_push(b, cheapest_node->target_node, 'b');
+	prep_for_push(a, cheapest, 'a');
+	prep_for_push(b, cheapest->target_node, 'b');
 	px(b, a, 'b');
 }
 
@@ -63,12 +65,15 @@ void	move_b_to_a(t_stack **a, t_stack **b)
 
 void	min_on_top(t_stack **a)
 {
-	while ((*a)->nbr != find_min(*a)->nbr)
+	t_stack	*smallest;
+
+	smallest = find_smallest(*a);
+	while ((*a)->nbr != smallest->nbr)
 	{
-		if (find_min(*a)->above_median)
-			rrx(a, 'a');
-		else
+		if (smallest->above_median)
 			rx(a, 'a');
+		else
+			rrx(a, 'a');
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 07:14:43 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/05 18:06:14 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/07 09:36:10 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	count_words(char *s, char c)
 
 	if (!s)
 		return (0);
-	words = 0;
+	words = 1;
 	while (*s)
 	{
 		if (*s == c)
@@ -35,7 +35,7 @@ char	*next_word(char *s, char c)
 	int			word_len;
 	int			i;
 
-	word_len = 1;
+	word_len = 0;
 	i = 0;
 	while (s[cursor] == c)
 		++cursor;
@@ -52,38 +52,22 @@ char	*next_word(char *s, char c)
 
 char	**split(char *s, char c)
 {
-	int		words_count;
-	char	**result_array;
+	int		words;
+	char	**array;
 	int		i;
 
 	i = 0;
-	// ft_printf("A test\n");
-	words_count = count_words(s, c);
-	if (words_count == 0)
+	words = count_words(s, c);
+	array = malloc(sizeof(char *) * (size_t)(words + 2));
+	if (!array)
 		return (0);
-	result_array = malloc(sizeof(char *) * (size_t)(words_count + 2));
-	// ft_printf("words_count: %d\n", words_count);
-	if (!result_array)
-		return (0);
-	// ft_printf("B test\n");
-	while (words_count-- > 0)
+	while (words-- > 0)
 	{
-		result_array[i] = next_word(s, c);
-		if (!result_array[i])
-		{
-			// free_split(result_array);
-			return NULL;
-		}
-		// ft_printf("result_array[%d]: %s\n", i, result_array[i]);
+		array[i] = next_word(s, c);
+		if (!array[i])
+			return (0);
 		i++;
 	}
-	// words_count = 0;
-	// result_array[0] = "./push_swap";
-	result_array[i] = 0;
-	// while (words_count < i)
-	// {
-	// 	ft_printf("word %d: %s\n", words_count, result_array[words_count]);
-	// 	++words_count;
-	// }
-	return (result_array);
+	array[i] = 0;
+	return (array);
 }
