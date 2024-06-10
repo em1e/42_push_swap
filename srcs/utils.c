@@ -6,12 +6,11 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 12:04:23 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/07 09:27:46 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:05:59 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h>
 
 long	ft_atol(const char *s)
 {
@@ -20,8 +19,8 @@ long	ft_atol(const char *s)
 
 	result = 0;
 	sign = 1;
-	while (*s == ' ' || *s == '\t' || *s == '\n' || \
-			*s == '\r' || *s == '\f' || *s == '\v')
+	while (*s == '\f' || *s == '\t' || *s == ' '
+		|| *s == '\n' || *s == '\r' || *s == '\v' )
 		s++;
 	if (*s == '-' || *s == '+')
 	{
@@ -34,29 +33,25 @@ long	ft_atol(const char *s)
 	return (result * sign);
 }
 
-void	append_node(t_stack **stack, int n)
+void	insert_node(t_stack **stack, int nbr)
 {
-	t_stack	*node;
-	t_stack	*last_node;
+	t_stack	*new_node;
+	t_stack	*tmp;
 
-	if (!stack)
+	new_node = malloc(sizeof(t_stack));
+	if (new_node == NULL)
 		return ;
-	node = malloc(sizeof(t_stack));
-	if (!node)
+	new_node->next = NULL;
+	new_node->nbr = nbr;
+	if (*stack == NULL)
+	{
+		*stack = new_node;
 		return ;
-	node->next = NULL;
-	node->nbr = n;
-	if (!(*stack))
-	{
-		*stack = node;
-		node->prev = NULL;
 	}
-	else
-	{
-		last_node = find_last(*stack);
-		last_node->next = node;
-		node->prev = last_node;
-	}
+	tmp = *stack;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_node;
 }
 
 void	set_current_index(t_stack *a, t_stack *b)
@@ -71,8 +66,6 @@ void	current_index(t_stack *stack)
 	int	median;
 
 	i = 0;
-	if (!stack)
-		return ;
 	median = stack_len(stack) / 2;
 	while (stack)
 	{

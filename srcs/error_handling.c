@@ -6,39 +6,25 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:32:11 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/07 09:46:27 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:13:01 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int	check_syntax(char *n)
+void	free_array(char **array)
 {
-	if (!(*n == '+' || *n == '-'
-			|| (*n >= '0' && *n <= '9')))
-		return (1);
-	if ((*n == '+' || *n == '-')
-		&& !(n[1] >= '0' && n[1] <= '9'))
-		return (1);
-	while (*++n)
-	{
-		if (!(*n >= '0' && *n <= '9'))
-			return (1);
-	}
-	return (0);
-}
+	int	i;
 
-int	check_duplicate(t_stack *a, int n)
-{
-	if (!a)
-		return (0);
-	while (a)
+	i = 0;
+	if (!array)
+		return ;
+	while (array[i])
 	{
-		if (a->nbr == n)
-			return (1);
-		a = a->next;
+		free(array[i]);
+		i++;
 	}
-	return (0);
+	free(array);
 }
 
 void	free_stack(t_stack **stack)
@@ -68,6 +54,5 @@ void	error(void)
 void	free_errors(t_stack **a)
 {
 	free_stack(a);
-	ft_printf("Error\n");
-	exit(1);
+	error();
 }

@@ -6,60 +6,12 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:42:05 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/07 10:28:23 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:13:08 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-
-t_stack	*find_target_node(t_stack *b, int stack)
-{
-	if (stack == 'a')
-		return (find_biggest(b));
-	else if (stack == 'b')
-		return (find_smallest(b));
-	return (NULL);
-}
-
-int	check_limit(t_stack *a, t_stack current_b, int stack, long limit)
-{
-	if ((current_b.nbr < a->nbr
-			&& current_b.nbr > limit && stack == 'a')
-		|| (current_b.nbr > a->nbr
-			&& current_b.nbr < limit && stack == 'b'))
-		return (1);
-	return (0);
-}
-
-void	set_target(t_stack *a, t_stack *b, int stack, long limit)
-{
-	t_stack	*current_b;
-	t_stack	*target_node;
-
-	while (a)
-	{
-		if (stack == 'a')
-			limit = LONG_MIN;
-		else if (stack == 'b')
-			limit = LONG_MAX;
-		current_b = b;
-		while (current_b)
-		{
-			if (check_limit(a, *current_b, stack, limit))
-			{
-				limit = current_b->nbr;
-				target_node = current_b;
-			}
-			current_b = current_b->next;
-		}
-		if ((limit == LONG_MAX && stack == 'b')
-			|| (limit == LONG_MIN && stack == 'a'))
-			a->target_node = find_target_node(b, stack);
-		else
-			a->target_node = target_node;
-		a = a->next;
-	}
-}
+#include <stdio.h>
 
 void	init_a(t_stack *a, t_stack *b)
 {
@@ -81,24 +33,57 @@ void	init_b(t_stack *a, t_stack *b)
 	set_target(a, b, 'b', limit);
 }
 
+int	check_syntax(char *nbr)
+{
+	if (!(*nbr == '+' || *nbr == '-'
+			|| (*nbr >= '0' && *nbr <= '9')))
+		return (1);
+	if ((*nbr == '+' || *nbr == '-')
+		&& !(nbr[1] >= '0' && nbr[1] <= '9'))
+		return (1);
+	while (*++nbr)
+	{
+		if (!(*nbr >= '0' && *nbr <= '9'))
+			return (1);
+	}
+	return (0);
+}
+
+int	check_duplicate(t_stack *a, int nbr)
+{
+	if (!a)
+		return (0);
+	while (a)
+	{
+		if (a->nbr == nbr)
+			return (1);
+		a = a->next;
+	}
+	return (0);
+}
+
 void	init_fill_a(t_stack **a, char **argv)
 {
 	long	n;
 	int		i;
 
 	i = 0;
+	if (ft_strncmp(argv[i], "./push_swap", 11) == 0)
+		i++;
 	if (!ft_isdigit(argv[i][0]) && argv[i][0] != '-' && argv[i][0] != '+')
 		i++;
+	if (argv[i] == NULL)
+		error();
 	while (argv[i])
 	{
 		if (check_syntax(argv[i]))
 			error();
 		n = ft_atol(argv[i]);
-		if (n > LONG_MAX || n < LONG_MIN)
+		if (n > MY_MAX_INT || n < MY_MIN_INT)
 			free_errors(a);
 		if (check_duplicate(*a, (int)n))
 			free_errors(a);
-		append_node(a, (int)n);
+		insert_node(a, (int)n);
 		i++;
 	}
 }
