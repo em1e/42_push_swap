@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 10:46:19 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/07 10:50:52 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:08:32 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_stack	*find_target_node(t_stack *b, int stack)
 	return (NULL);
 }
 
-int	check_limit(t_stack *a, t_stack current_b, int stack, long limit)
+int	check_b(t_stack *a, t_stack current_b, int stack, long limit)
 {
 	if ((current_b.nbr < a->nbr
 			&& current_b.nbr > limit && stack == 'a')
@@ -51,7 +51,7 @@ void	set_target(t_stack *a, t_stack *b, int stack, long limit)
 		current_b = b;
 		while (current_b)
 		{
-			if (check_limit(a, *current_b, stack, limit))
+			if (check_b(a, *current_b, stack, limit))
 			{
 				limit = current_b->nbr;
 				target_node = current_b;

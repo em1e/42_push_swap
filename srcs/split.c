@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 07:14:43 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/10 11:56:43 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:42:43 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,50 @@
 int	count_words(char *s, char c)
 {
 	int		words;
+	int		i;
 
+	i = 0;
+	words = 1;
 	if (!s)
 		return (0);
-	words = 1;
-	while (*s)
+	while (s[i] == c)
+		i++;
+	while (s[i] != '\0')
 	{
-		if (*s == c)
-			++words;
-		++s;
+		if (s[i] == '-')
+			i++;
+		if (ft_isdigit(s[i]) == 0 && s[i] != c)
+		{
+			error();
+			return (-1);
+		}
+		if (s[i] == c && s[i + 1] != c && s[i + 1] != '\0')
+			words++;
+		i++;
 	}
+	i = 0;
 	return (words);
 }
 
 char	*next_word(char *s, char c)
 {
-	static int	cursor = 0;
+	static int	index = 0;
 	char		*next_word;
 	int			word_len;
-	int			i;
+	int			new_i;
 
 	word_len = 0;
-	i = 0;
-	while (s[cursor] == c)
-		++cursor;
-	while ((s[cursor + word_len] != c) && s[cursor + word_len])
+	new_i = 0;
+	while (s[index] == c)
+		++index;
+	while ((s[index + word_len] != c) && s[index + word_len])
 		++word_len;
 	next_word = malloc((size_t)word_len * sizeof(char) + 1);
 	if (!next_word)
 		return (0);
-	while ((s[cursor] != c) && s[cursor])
-		next_word[i++] = s[cursor++];
-	next_word[i] = '\0';
+	while ((s[index] != c) && s[index])
+		next_word[new_i++] = s[index++];
+	next_word[new_i] = '\0';
 	return (next_word);
 }
 

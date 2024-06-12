@@ -6,12 +6,11 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:42:05 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/10 13:13:08 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:30:41 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <stdio.h>
 
 void	init_a(t_stack *a, t_stack *b)
 {
@@ -62,23 +61,23 @@ int	check_duplicate(t_stack *a, int nbr)
 	return (0);
 }
 
-void	init_fill_a(t_stack **a, char **argv)
+void	init_fill_a(t_stack **a, char **array)
 {
 	long	n;
 	int		i;
 
 	i = 0;
-	if (ft_strncmp(argv[i], "./push_swap", 11) == 0)
+	if (ft_strncmp(array[i], "./push_swap", 11) == 0)
 		i++;
-	if (!ft_isdigit(argv[i][0]) && argv[i][0] != '-' && argv[i][0] != '+')
+	if (!ft_isdigit(array[i][0]) && array[i][0] != '-' && array[i][0] != '+')
 		i++;
-	if (argv[i] == NULL)
+	if (array[i] == NULL)
 		error();
-	while (argv[i])
+	while (array[i])
 	{
-		if (check_syntax(argv[i]))
+		if (check_syntax(array[i]))
 			error();
-		n = ft_atol(argv[i]);
+		n = ft_atol(array[i]);
 		if (n > MY_MAX_INT || n < MY_MIN_INT)
 			free_errors(a);
 		if (check_duplicate(*a, (int)n))

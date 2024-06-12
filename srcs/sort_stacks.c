@@ -6,7 +6,7 @@
 /*   By: vkettune <vkettune@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 03:55:01 by vkettune          #+#    #+#             */
-/*   Updated: 2024/06/07 09:59:29 by vkettune         ###   ########.fr       */
+/*   Updated: 2024/06/12 10:52:12 by vkettune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,14 @@ void	min_on_top(t_stack **a)
 
 void	sort_stacks(t_stack **a, t_stack **b)
 {
-	int	len_a;
+	int	len;
 
-	len_a = stack_len(*a);
-	if (len_a-- > 3 && !is_sorted(*a))
+	len = stack_len(*a);
+	if (len-- > 3 && !is_sorted(*a))
 		px(b, a, 'b');
-	if (len_a-- > 3 && !is_sorted(*a))
+	if (len-- > 3 && !is_sorted(*a))
 		px(b, a, 'b');
-	while (len_a-- > 3 && !is_sorted(*a))
+	while (len-- > 3 && !is_sorted(*a))
 	{
 		init_a(*a, *b);
 		move_a_to_b(a, b);
@@ -97,6 +97,5 @@ void	sort_stacks(t_stack **a, t_stack **b)
 		init_b(*b, *a);
 		move_b_to_a(a, b);
 	}
-	current_index(*a);
 	min_on_top(a);
 }
